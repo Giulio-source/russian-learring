@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Russo Flashcards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<meta name="color-scheme" content="light dark">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<main>
+  <header class="brand">
+    <div class="logo" aria-hidden="true">Ру</div>
+    <div>
+      <h1>Русский</h1>
+      <p class="sub" id="subtitle">Impara il tuo vocabolario</p>
+    </div>
+    <span class="langs" aria-label="Russo e Italiano">RU · IT</span>
+  </header>
+
+  <!-- Load screen -->
+  <section id="screen-load" class="hidden">
+    <div id="drop" class="panel">
+      <div>Trascina qui il file Excel</div>
+      <div style="font-size:.85rem">(.xlsx con il foglio dei vocaboli e il foglio «Verbi» · va bene anche un .csv di soli vocaboli)</div>
+      <button class="primary" id="pick">Scegli file</button>
+      <input type="file" id="file" accept=".xlsx,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden>
+      <div class="error hidden" id="load-error"></div>
+    </div>
+    <div class="center"><button class="link hidden" id="cancel-load">Annulla</button></div>
+  </section>
+
+  <!-- Menu -->
+  <section id="screen-menu" class="hidden">
+    <div class="seg seg-section" id="seg-section">
+      <button data-v="words">Vocaboli</button>
+      <button data-v="verbs">Verbi</button>
+    </div>
+    <div class="panel stats">
+      <div><b id="st-due">0</b><span>da ripassare</span></div>
+      <div><b id="st-new">0</b><span>nuove</span></div>
+      <div><b id="st-learned">0</b><span>imparate</span></div>
+      <div><b id="st-total">0</b><span>totale</span></div>
+    </div>
+    <div class="panel">
+      <p class="label">Direzione</p>
+      <div class="seg" id="seg-dir">
+        <button data-v="ru-it">Russo → Italiano</button>
+        <button data-v="it-ru">Italiano → Russo</button>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <button class="primary" id="start">Inizia</button>
+        <button id="start-all">Ripassa tutto</button>
+      </div>
+      <p class="hint center" id="menu-hint"></p>
+      <p class="hint center hidden" id="verbs-hint">Ogni verbo ha due esercizi: il significato (nella direzione scelta) e la coniugazione al presente, a volte dentro una frase d'esempio.</p>
+    </div>
+    <div class="center">
+      <button class="link" id="reload">Carica nuovo file</button>
+      <button class="link" id="reset">Azzera progressi</button>
+    </div>
+    <p class="hint center" id="speech-hint">🔇 Nessuna voce russa trovata: la pronuncia audio non è disponibile. Su Mac: Impostazioni di Sistema → Accessibilità → Contenuto letto ad alta voce → Voce di sistema → Gestisci voci → Russo, poi ricarica la pagina.</p>
+  </section>
+
+  <!-- Session -->
+  <section id="screen-session" class="hidden">
+    <div class="topbar">
+      <span id="progress-text"></span>
+      <button class="link" id="quit">Esci</button>
+    </div>
+    <div class="bar"><div id="progress-bar"></div></div>
+
+
+    <div id="quiz">
+      <div class="panel card" id="quiz-card" style="cursor:default">
+        <div class="qlabel" id="q-label"></div>
+        <div class="prompt" id="q-prompt"></div>
+        <div class="pron" id="q-pron"></div>
+        <div class="speak hidden" id="q-speak">
+          <button type="button" class="say" id="q-say" title="Ascolta (A)" aria-label="Ascolta">🔊 <small>A</small></button>
+          <button type="button" class="say" id="q-say-slow" title="Ascolta lentamente (L)" aria-label="Ascolta lentamente">🐢 <small>L</small></button>
+        </div>
+      </div>
+      <div class="opts" id="q-opts"></div>
+      <div class="feedback center hidden" id="q-feedback"></div>
+      <div class="row hidden" id="q-next-row" style="margin-top:12px">
+        <button class="primary" id="q-next">Avanti <small>(Invio)</small></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Summary -->
+  <section id="screen-summary" class="hidden">
+    <div class="panel">
+      <p class="center label">Sessione completata</p>
+      <div class="big" id="sum-score"></div>
+      <p class="center hint" style="margin-top:4px">corrette al primo tentativo</p>
+      <p class="center hint" id="sum-text"></p>
+      <ul class="missed" id="sum-missed"></ul>
+    </div>
+    <div class="row">
+      <button class="primary" id="back-menu">Torna al menu</button>
+    </div>
+  </section>
+</main>
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>
