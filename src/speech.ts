@@ -49,8 +49,9 @@ export function speak(text: string, slow = false): void {
   u.lang = LANG;
   u.voice = voice;
   u.rate = slow ? SLOW_RATE : 1;
-  // Chrome sometimes drops an utterance queued in the same tick as cancel().
-  setTimeout(() => s.speak(u), 0);
+  // Must be called synchronously inside the tap/click handler: iOS Safari only
+  // allows speech started directly by a user gesture.
+  s.speak(u);
 }
 
 export function stopSpeaking(): void {

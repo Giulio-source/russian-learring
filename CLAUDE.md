@@ -15,6 +15,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run typecheck` — `tsc --noEmit` (strict, `noUncheckedIndexedAccess`).
 - `npm test` — Vitest unit tests in `tests/` (pure logic only, node environment; `tests/node-shims.d.ts` types the bit of `node:fs` used, instead of @types/node). Single file: `npx vitest run tests/srs.test.ts`.
 
+**Deploy:** GitHub repo `Giulio-source/russian-learring`; `.github/workflows/pages.yml` runs tests + build on every push to `main` and publishes `dist/` to GitHub Pages (https://giulio-source.github.io/russian-learring/), used mainly from the user's phone. Since everything is inlined, no Vite `base` is needed. Keep the UI usable on touch screens (`@media (hover: none)` rules in styles.css; speech must be started synchronously from the tap for iOS Safari).
+
 `legacy/index.html` is the original pre-TypeScript single-file version, kept for reference.
 
 ## Data format

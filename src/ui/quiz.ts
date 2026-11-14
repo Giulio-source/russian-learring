@@ -34,6 +34,7 @@ export function renderQuiz(s: Session): void {
   $("q-next-row").classList.add("hidden");
   stopSpeaking();
   updateSpeak(false);
+  window.scrollTo(0, 0);
   replayAnim($("quiz-card"));
 }
 

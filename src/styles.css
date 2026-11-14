@@ -205,6 +205,12 @@ button.say small { font-size: .7rem; font-weight: 600; color: var(--muted); marg
   .conj { grid-template-columns: 1fr; }
   .langs { display: none; }
 }
+/* Touch devices: keyboard hints are meaningless, and "Avanti" stays reachable at the bottom. */
+@media (hover: none) {
+  button small { display: none; }
+  #q-next-row { position: sticky; bottom: 12px; z-index: 2; }
+  #q-next-row button { box-shadow: var(--shadow-lg); }
+}
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
