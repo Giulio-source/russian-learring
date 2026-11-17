@@ -3,7 +3,6 @@ import { computeStats } from "../srs";
 import { setPrefs, setProgress, state } from "../state";
 import type { Prefs, Progress } from "../types";
 import { $ } from "../util";
-import { openLoad } from "./load";
 import { show } from "./screens";
 import { startSession } from "./session";
 
@@ -68,7 +67,6 @@ export function initMenu(): void {
   bindSeg("seg-dir", "dir");
   $("start").onclick = () => startSession(false);
   $("start-all").onclick = () => startSession(true);
-  $("reload").onclick = () => openLoad(true);
   $("reset").onclick = () => {
     const what = state.prefs.section === "verbs" ? "dei verbi" : "dei vocaboli";
     if (confirm("Vuoi davvero azzerare i progressi " + what + "?")) {

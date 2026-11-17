@@ -94,15 +94,6 @@ button small { opacity: .65; font-weight: 400; }
 .row { display: flex; gap: 10px; flex-wrap: wrap; }
 .row > button { flex: 1; }
 
-/* ---------- Load screen ---------- */
-#drop {
-  border: 1.5px dashed var(--border-strong); box-shadow: none; padding: 48px 20px;
-  text-align: center; color: var(--muted); transition: border-color .15s, background .15s;
-}
-#drop > div:first-child { color: var(--text); font-size: 1.15rem; font-weight: 600; margin-bottom: 4px; }
-#drop.over { border-color: var(--accent); background: var(--accent-soft); }
-#drop button { margin-top: 18px; }
-
 /* ---------- Segmented controls ---------- */
 .seg {
   display: flex; gap: 4px; padding: 4px; margin-bottom: 16px;

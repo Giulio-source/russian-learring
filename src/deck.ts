@@ -1,4 +1,4 @@
-import { rowsToCards } from "./csv";
+import { rowsToCards } from "./words";
 import type { Card, Verb } from "./types";
 import { rowsToVerbs } from "./verbs";
 import type { Sheet } from "./xlsx";

@@ -1,23 +1,22 @@
-import { KEY_CARDS, KEY_PREFS, KEY_PROGRESS, KEY_VERBS, loadCards, loadPrefs, loadProgress, loadVerbs, save } from "./storage";
+import { KEY_PREFS, KEY_PROGRESS, loadPrefs, loadProgress, save } from "./storage";
 import type { Card, Prefs, Progress, Session, Verb } from "./types";
 
-/** Mutable app state shared by the UI modules. Persist through the setters. */
+/**
+ * Mutable app state shared by the UI modules. The deck (cards, verbs) is read
+ * from the bundled Excel at startup and never saved; progress and prefs are
+ * persisted through their setters.
+ */
 export const state = {
-  cards: loadCards(),
-  verbs: loadVerbs(),
+  cards: [] as Card[],
+  verbs: [] as Verb[],
   progress: loadProgress(),
   prefs: loadPrefs(),
   session: null as Session | null,
 };
 
-export function setCards(cards: Card[]): void {
+export function setDeck(cards: Card[], verbs: Verb[]): void {
   state.cards = cards;
-  save(KEY_CARDS, cards);
-}
-
-export function setVerbs(verbs: Verb[]): void {
   state.verbs = verbs;
-  save(KEY_VERBS, verbs);
 }
 
 export function setProgress(progress: Progress): void {

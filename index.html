@@ -25,14 +25,10 @@
 
   <!-- Load screen -->
   <section id="screen-load" class="hidden">
-    <div id="drop" class="panel">
-      <div>Trascina qui il file Excel</div>
-      <div style="font-size:.85rem">(.xlsx con il foglio dei vocaboli e il foglio «Verbi» · va bene anche un .csv di soli vocaboli)</div>
-      <button class="primary" id="pick">Scegli file</button>
-      <input type="file" id="file" accept=".xlsx,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden>
-      <div class="error hidden" id="load-error"></div>
+    <div class="panel center">
+      <p class="hint" id="load-status" style="margin:0">Caricamento del vocabolario…</p>
+      <div class="error hidden" id="load-error" style="margin:0"></div>
     </div>
-    <div class="center"><button class="link hidden" id="cancel-load">Annulla</button></div>
   </section>
 
   <!-- Menu -->
@@ -61,7 +57,6 @@
       <p class="hint center hidden" id="verbs-hint">Ogni verbo ha due esercizi: il significato (nella direzione scelta) e la coniugazione al presente, a volte dentro una frase d'esempio.</p>
     </div>
     <div class="center">
-      <button class="link" id="reload">Carica nuovo file</button>
       <button class="link" id="reset">Azzera progressi</button>
     </div>
     <p class="hint center" id="speech-hint">🔇 Nessuna voce russa trovata: la pronuncia audio non è disponibile. Su Mac: Impostazioni di Sistema → Accessibilità → Contenuto letto ad alta voce → Voce di sistema → Gestisci voci → Russo, poi ricarica la pagina.</p>

@@ -1,9 +1,9 @@
-import type { Card, Prefs, Progress, Verb } from "./types";
+import type { Prefs, Progress } from "./types";
 
-export const KEY_CARDS = "ruapp.cards";
 export const KEY_PROGRESS = "ruapp.progress";
 export const KEY_PREFS = "ruapp.prefs";
-export const KEY_VERBS = "ruapp.verbs";
+/** Keys of older versions, which stored the loaded deck; now the deck comes from the bundled Excel. */
+const LEGACY_KEYS = ["ruapp.cards", "ruapp.verbs"];
 
 export function load<T>(key: string, fallback: T): T {
   try {
@@ -22,14 +22,13 @@ export function save(key: string, value: unknown): void {
   }
 }
 
-export function loadCards(): Card[] {
-  const v = load<unknown>(KEY_CARDS, []);
-  return Array.isArray(v) ? (v as Card[]) : [];
-}
-
-export function loadVerbs(): Verb[] {
-  const v = load<unknown>(KEY_VERBS, []);
-  return Array.isArray(v) ? (v as Verb[]).filter(x => x && Array.isArray(x.forms)) : [];
+/** Drops the deck copies saved by older versions (progress and prefs are kept). */
+export function removeLegacyKeys(): void {
+  try {
+    for (const k of LEGACY_KEYS) localStorage.removeItem(k);
+  } catch {
+    /* ignore */
+  }
 }
 
 export function loadProgress(): Progress {
