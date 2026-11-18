@@ -1,4 +1,5 @@
 import type { Card, Example, Exercise, Verb } from "./types";
+import { normalizeStress, stripStress } from "./stress";
 import { shuffle, type Rng } from "./util";
 
 /** Persons of the present tense, in sheet column order (D–I). */
@@ -21,8 +22,9 @@ export function isVerb(card: Card): card is Verb {
   return Array.isArray((card as Partial<Verb>).forms);
 }
 
+/** Stress marks are ignored, so adding an accent keeps the saved progress. */
 export function verbId(ru: string, it: string): string {
-  return "verb␟" + ru + "␟" + it;
+  return "verb␟" + stripStress(ru) + "␟" + it;
 }
 
 /**
@@ -39,18 +41,20 @@ export function rowsToVerbs(rows: string[][]): Verb[] {
   const seen = new Set<string>();
   for (const r of rows.slice(1)) {
     const cell = (i: number): string => (r[i] ?? "").trim();
-    const ru = cell(0);
+    /** Russian cells: stress marks normalised to U+0301. */
+    const ruCell = (i: number): string => normalizeStress(cell(i));
+    const ru = ruCell(0);
     const it = cell(1);
     if (!ru || !it) continue;
     const id = verbId(ru, it);
     if (seen.has(id)) continue;
     seen.add(id);
 
-    const forms = Array.from({ length: 6 }, (_, i) => cell(FORMS_COL + i));
+    const forms = Array.from({ length: 6 }, (_, i) => ruCell(FORMS_COL + i));
     const examples: Example[] = [];
     const end = noteCol >= 0 ? noteCol : r.length;
     for (let i = EXAMPLES_COL; i < end; i += 2) {
-      const ex = { ru: cell(i), it: cell(i + 1) };
+      const ex = { ru: ruCell(i), it: cell(i + 1) };
       if (ex.ru) examples.push(ex);
     }
     out.push({ id, ru, it, pron: cell(2), forms, examples, note: noteCol >= 0 ? cell(noteCol) : "" });
@@ -58,14 +62,14 @@ export function rowsToVerbs(rows: string[][]): Verb[] {
   return out;
 }
 
-const norm = (s: string): string => s.toLowerCase().replace(/ё/g, "е");
+const norm = (s: string): string => stripStress(s).toLowerCase().replace(/ё/g, "е");
 
 /**
  * Finds a conjugated form of `verb` inside `sentence`. Returns the person index
  * and the sentence with that word blanked out, or null if no form occurs.
  */
 export function blankForm(sentence: string, verb: Verb): { person: number; text: string } | null {
-  for (const m of sentence.matchAll(/[\p{L}-]+/gu)) {
+  for (const m of sentence.matchAll(/[\p{L}\u0301-]+/gu)) {
     const person = verb.forms.findIndex(f => f && norm(f) === norm(m[0]));
     if (person >= 0) {
       const start = m.index ?? 0;
@@ -77,7 +81,7 @@ export function blankForm(sentence: string, verb: Verb): { person: number; text:
 
 /** Correct form + up to 3 other distinct forms of the same verb, shuffled. */
 function formOptions(verb: Verb, correct: string, rng: Rng): string[] {
-  const others = [...new Set(verb.forms.filter(f => f && f !== correct))];
+  const others = [...new Set(verb.forms.filter(f => f && norm(f) !== norm(correct)))];
   return shuffle([correct, ...shuffle(others, rng).slice(0, 3)], rng);
 }
 

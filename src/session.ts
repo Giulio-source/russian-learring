@@ -1,3 +1,4 @@
+import { stripStress } from "./stress";
 import { isDue, isNew, NEW_PER_SESSION } from "./srs";
 import type { Card, Dir, Exercise, Progress, PromptText, Section, Session, StudyItem, Verb } from "./types";
 import { shuffle, type Rng } from "./util";
@@ -89,12 +90,13 @@ export function answerText(card: Card, dir: Dir): string {
 /** Correct answer + up to 3 distinct distractors from other cards, shuffled. */
 export function quizOptions(card: Card, cards: Card[], dir: Dir, rng: Rng = Math.random): { options: string[]; correct: string } {
   const correct = answerText(card, dir);
-  const used = new Set([correct]);
+  // Compared without accents, so the same word with/without a stress mark is never offered twice.
+  const used = new Set([stripStress(correct)]);
   const distractors: string[] = [];
   for (const o of shuffle(cards.slice(), rng)) {
     const t = answerText(o, dir);
-    if (used.has(t)) continue;
-    used.add(t);
+    if (used.has(stripStress(t))) continue;
+    used.add(stripStress(t));
     distractors.push(t);
     if (distractors.length === 3) break;
   }

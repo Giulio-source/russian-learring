@@ -41,5 +41,6 @@ export function loadPrefs(): Prefs {
   return {
     dir: p.dir === "it-ru" ? "it-ru" : "ru-it",
     section: p.section === "verbs" ? "verbs" : "words",
+    stress: p.stress !== false,
   };
 }

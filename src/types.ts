@@ -41,6 +41,8 @@ export type Progress = Record<string, Partial<Record<Slot, BoxState>>>;
 export interface Prefs {
   dir: Dir;
   section: Section;
+  /** Show stress marks on Russian text (default true). */
+  stress: boolean;
 }
 
 /** One thing to review: a card (word or verb) tested in a given slot. */

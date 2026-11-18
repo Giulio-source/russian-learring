@@ -27,6 +27,7 @@ export function renderMenu(): void {
   const verbsMode = prefs.section === "verbs";
   setSeg("seg-section", prefs.section);
   setSeg("seg-dir", prefs.dir);
+  setSeg("seg-stress", prefs.stress ? "on" : "off");
   const st = computeStats(studyItems(prefs.section, cards, verbs, prefs.dir), progress);
   $("st-due").textContent = String(st.due);
   $("st-new").textContent = String(st.fresh);
@@ -65,6 +66,12 @@ function resetSection(): void {
 export function initMenu(): void {
   bindSeg("seg-section", "section");
   bindSeg("seg-dir", "dir");
+  $("seg-stress").querySelectorAll<HTMLButtonElement>("button").forEach(b => {
+    b.onclick = () => {
+      setPrefs({ ...state.prefs, stress: b.dataset.v === "on" });
+      renderMenu();
+    };
+  });
   $("start").onclick = () => startSession(false);
   $("start-all").onclick = () => startSession(true);
   $("reset").onclick = () => {

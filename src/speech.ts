@@ -11,6 +11,8 @@
  * (Brave still swaps in its English voice regardless; use Safari or Chrome.)
  */
 
+import { stripStress } from "./stress";
+
 /** Speech rate for the slow button; below ~0.5 many voices get distorted. */
 export const SLOW_RATE = 0.6;
 const LANG = "ru-RU";
@@ -45,7 +47,8 @@ export function speak(text: string, slow = false): void {
   const voice = currentVoice();
   if (!s || !voice || !text.trim()) return;
   s.cancel();
-  const u = new SpeechSynthesisUtterance(text);
+  // Stress marks are stripped: voices may spell out or mispronounce U+0301.
+  const u = new SpeechSynthesisUtterance(stripStress(text));
   u.lang = LANG;
   u.voice = voice;
   u.rate = slow ? SLOW_RATE : 1;

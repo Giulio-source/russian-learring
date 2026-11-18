@@ -2,6 +2,7 @@ import type { Session } from "../types";
 import { speakButton, stopSpeaking } from "../speech";
 import { $ } from "../util";
 import { openMenu } from "./menu";
+import { setRu } from "./ru";
 import { show } from "./screens";
 
 export function showSummary(s: Session): void {
@@ -13,7 +14,7 @@ export function showSummary(s: Session): void {
   for (const c of s.missed.values()) {
     const li = document.createElement("li");
     const b = document.createElement("b");
-    b.textContent = c.ru;
+    setRu(b, c.ru);
     const sm = document.createElement("small");
     sm.textContent = "  " + c.pron;
     const say = document.createElement("span");

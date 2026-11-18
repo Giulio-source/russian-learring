@@ -4,6 +4,8 @@ import type { Card, Exercise, Session } from "../types";
 import { $, replayAnim } from "../util";
 import { speak, stopSpeaking } from "../speech";
 import { isVerb, PERSONS_RU, spokenForm } from "../verbs";
+import { stripStress } from "../stress";
+import { setRu, ruNode } from "./ru";
 import { answer, next } from "./session";
 
 let currentExercise: Exercise | null = null;
@@ -13,10 +15,10 @@ export function renderQuiz(s: Session): void {
   const pool = s.section === "verbs" ? state.verbs : state.cards;
   const ex = exerciseFor(s.current, pool);
   currentExercise = ex;
-  $("q-label").textContent = ex.label;
+  setRu($("q-label"), ex.label);
   const prompt = $("q-prompt");
-  prompt.textContent = ex.q;
-  prompt.classList.toggle("long", ex.q.length > 18);
+  setRu(prompt, ex.q);
+  prompt.classList.toggle("long", stripStress(ex.q).length > 18);
   $("q-pron").textContent = ex.qPron;
 
   const box = $("q-opts");
@@ -25,7 +27,7 @@ export function renderQuiz(s: Session): void {
     const b = document.createElement("button");
     const k = document.createElement("kbd");
     k.textContent = i + 1 + ".";
-    b.append(k, t);
+    b.append(k, ruNode(t));
     b.dataset.correct = t === ex.correct ? "1" : "";
     b.onclick = () => choose(b);
     box.appendChild(b);
@@ -60,11 +62,11 @@ function renderFeedback(card: Card, ex: Exercise | null): void {
   const head = document.createElement("div");
   head.className = "pron";
   if (!isVerb(card)) {
-    head.textContent = card.ru + (card.pron ? "  —  " + card.pron : "");
+    setRu(head, card.ru + (card.pron ? "  —  " + card.pron : ""));
     fb.append(head);
     return;
   }
-  head.textContent = card.ru + " — " + card.it + (card.pron ? "  (" + card.pron + ")" : "");
+  setRu(head, card.ru + " — " + card.it + (card.pron ? "  (" + card.pron + ")" : ""));
   fb.append(head);
   if (card.forms.some(f => f)) {
     const grid = document.createElement("div");
@@ -82,7 +84,7 @@ function renderFeedback(card: Card, ex: Exercise | null): void {
       const p = document.createElement("span");
       p.textContent = PERSONS_RU[i] ?? "";
       const f = document.createElement("b");
-      f.textContent = card.forms[i] || "—";
+      setRu(f, card.forms[i] || "—");
       cell.append(p, f);
       grid.append(cell);
     }
@@ -91,7 +93,7 @@ function renderFeedback(card: Card, ex: Exercise | null): void {
   if (card.note) {
     const note = document.createElement("div");
     note.className = "note";
-    note.textContent = card.note;
+    setRu(note, card.note);
     fb.append(note);
   }
 }
