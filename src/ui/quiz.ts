@@ -55,6 +55,41 @@ export function sayCurrent(slow: boolean): void {
   speak(speechText(!!state.session?.answered), slow);
 }
 
+/** Copies `text` to the clipboard; falls back to execCommand where the Clipboard API is missing. */
+async function copyText(text: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.append(ta);
+    ta.select();
+    const ok = document.execCommand("copy");
+    ta.remove();
+    return ok;
+  }
+}
+
+/** "📋 Copia" button for a word/phrase (copied without stress marks, ready to paste in a translator). */
+function copyButton(text: string): HTMLButtonElement {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.className = "copy";
+  const label = "📋 Copia";
+  b.textContent = label;
+  b.title = "Copia «" + text + "»";
+  b.onclick = async e => {
+    e.stopPropagation();
+    b.textContent = (await copyText(text)) ? "✓ Copiato" : "Copia non riuscita";
+    setTimeout(() => { b.textContent = label; }, 1500);
+  };
+  return b;
+}
+
 /** After answering: the word with its pronunciation, or for a verb its full conjugation table. */
 function renderFeedback(card: Card, ex: Exercise | null): void {
   const fb = $("q-feedback");
@@ -63,7 +98,7 @@ function renderFeedback(card: Card, ex: Exercise | null): void {
   head.className = "pron";
   if (!isVerb(card)) {
     setRu(head, card.ru + (card.pron ? "  —  " + card.pron : ""));
-    fb.append(head);
+    fb.append(head, copyButton(stripStress(card.ru)));
     return;
   }
   setRu(head, card.ru + " — " + card.it + (card.pron ? "  (" + card.pron + ")" : ""));

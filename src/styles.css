@@ -223,6 +223,8 @@ body.tts #speech-hint { display: none; }
 button.say { padding: 6px 12px; border-radius: 999px; font-size: .95rem; line-height: 1.2; background: var(--surface-2); border-color: transparent; }
 button.say:hover:not(:disabled) { border-color: var(--border-strong); }
 button.say small { font-size: .7rem; font-weight: 600; color: var(--muted); margin-left: 4px; opacity: 1; }
+button.copy { margin-top: 10px; padding: 5px 12px; border-radius: 999px; font-size: .85rem; background: var(--surface-2); border-color: transparent; }
+button.copy:hover:not(:disabled) { border-color: var(--border-strong); }
 .say-row { float: right; display: inline-flex; gap: 6px; }
 .say-row button.say { padding: 4px 10px; font-size: .85rem; }
 
